@@ -37,10 +37,9 @@ class Route {
 
     public static function load() {
         $uri = $_SERVER['REQUEST_URI'];
+        $uriArr = explode('?', $uri);
+        $uri = $uriArr[0];
         $method = $_SERVER['REQUEST_METHOD'];
-
-        // $entityBody = file_get_contents('php://input');
-        // echo var_dump(json_decode($entityBody, true));
 
         $key = [$method, $uri];
 
@@ -64,7 +63,7 @@ class Route {
         }
 
         if (is_callable($to_render)) {
-            $called = $to_render();
+            $called = $to_render(new Request);
 
             if (is_string($called)) {
                 echo $called;
