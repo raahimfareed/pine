@@ -1,6 +1,6 @@
 <?php
 
-namespace Raahim\Project1\App;
+namespace Pine\App;
 
 class Route {
     private static $routes = [];

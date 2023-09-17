@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'raahim/project-1',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => NULL,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => 'eea8f447d6ab4a2ae096378c94b95a1ccf52d66e',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'raahim/project-1' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => NULL,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => 'eea8f447d6ab4a2ae096378c94b95a1ccf52d66e',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

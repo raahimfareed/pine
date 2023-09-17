@@ -1,5 +1,5 @@
 {
-    "name": "pine",
+    "name": "raahim/project-1",
     "description": "Test project, maybe a future php framework",
     "type": "library",
     "autoload": {

@@ -1,5 +1,5 @@
 <?php
-use Raahim\Project1\App\Route;
+use Pine\App\Route;
 
 Route::get("/", fn () => "Hello, World");
 Route::get("/post", fn () => "This is a post route");
