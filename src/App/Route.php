@@ -39,6 +39,9 @@ class Route {
         $uri = $_SERVER['REQUEST_URI'];
         $method = $_SERVER['REQUEST_METHOD'];
 
+        // $entityBody = file_get_contents('php://input');
+        // echo var_dump(json_decode($entityBody, true));
+
         $key = [$method, $uri];
 
         $route = self::$routes[serialize($key)] ?? null;
