@@ -21,6 +21,20 @@ class Route {
         self::$routes[serialize($route)] = $fn;
     }
 
+    public static function post(string $path, $fn) {
+        $route = ['POST', $path];
+        if (strlen($path) === 0) {
+            self::$routes[serialize($route)] = $fn;
+            return;
+        }
+        if ($path[0] != "/") {
+            self::$routes[serialize($route)] = $fn;
+            return;
+        }
+
+        self::$routes[serialize($route)] = $fn;
+    }
+
     public static function load() {
         $uri = $_SERVER['REQUEST_URI'];
         $method = $_SERVER['REQUEST_METHOD'];
