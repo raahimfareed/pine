@@ -1,0 +1,17 @@
+{
+    "name": "raahim/project-1",
+    "description": "Sample project, maybe a future php framework",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Raahim\\Project1\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Raahim Fareed",
+            "email": "raahimfareed@proton.me"
+        }
+    ],
+    "require": {}
+}
