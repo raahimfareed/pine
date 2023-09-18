@@ -85,3 +85,10 @@ And then you can access it in your leaf file
 <h1>{{name}}</h1>
 ```
 
+### CSS and JS
+Pine serves `public/css/main.css` and `public/js/main.js` files for css and js respectively
+
+You just need to add @css and @js directives in your leaf file if you need these files.
+
+Bundling with Vite coming soon!
+
