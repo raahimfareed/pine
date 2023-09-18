@@ -13,7 +13,7 @@ Route::get("/request", function (Request $request) {
 });
 
 Route::get("/template", function () {
-    return new View("test");
+    return new View("test", ["name" => "This is a parameter", "title" => "New title"]);
 });
 
 Route::post("/test", fn () => "This is a test response");

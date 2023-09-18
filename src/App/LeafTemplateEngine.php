@@ -5,7 +5,8 @@ namespace Pine\App;
 class LeafTemplateEngine {
     private $data = [];
 
-    public function render($templatePath) {
+    public function render($templatePath, array $data = []) {
+        $this->data = $data;
         ob_start();
 
         include $templatePath;
@@ -20,6 +21,27 @@ class LeafTemplateEngine {
     }
 
     public function parseTemplate($content) {
+        $variables = $this->extractTemplateVariables($content);
+        foreach ($variables as $var) {
+            $content = str_replace("{{".$var."}}", $this->data[$var] ?? "", $content);
+            $content = str_replace("{{ ".$var."}}", $this->data[$var] ?? "", $content);
+            $content = str_replace("{{".$var." }}", $this->data[$var] ?? "", $content);
+            $content = str_replace("{{ ".$var." }}", $this->data[$var] ?? "", $content);
+        }
         return $content;
+    }
+
+    function extractTemplateVariables($templateString) {
+        $variables = [];
+
+        $pattern = '/{{\s*(\w+)\s*}}/';
+
+        preg_match_all($pattern, $templateString, $matches);
+
+        if (!empty($matches[1])) {
+            $variables = array_unique($matches[1]);
+        }
+
+        return $variables;
     }
 }
