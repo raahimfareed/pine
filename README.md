@@ -3,6 +3,10 @@
 
 Pine is a minimal PHP Web Framework
 
+## Important
+This is just a hobby project and is not complete in any way.
+If you are looking for a framework that is production compatible, check out [Laravel](https://github.com/laravel/laravel/)
+
 ## Prerequisites
 - PHP 8.2.10
 - Composer 2.6.2
