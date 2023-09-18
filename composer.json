@@ -1,7 +1,7 @@
 {
-    "name": "raahim/project-1",
-    "description": "Test project, maybe a future php framework",
-    "type": "library",
+    "name": "raahim/pine",
+    "description": "Minimal PHP framework",
+    "type": "project",
     "autoload": {
         "psr-4": {
             "Pine\\": "src/"
@@ -13,5 +13,7 @@
             "email": "raahimfareed@proton.me"
         }
     ],
-    "require": {}
+    "require": {
+        "php": ">=8.2"
+    }
 }
