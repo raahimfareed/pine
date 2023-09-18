@@ -22,8 +22,8 @@ class LeafTemplateEngine {
 
     public function parseTemplate($content) {
         $variables = $this->extractTemplateVariables($content);
-        $content = str_replace("@css", "<link rel=\"stylesheet\" type=\"text/css\" href=\"public/css/main.css\" />", $content);
-        $content = str_replace("@js", "<script src=\"public/js/main.js\"></script>", $content);
+        $content = str_replace("@css", "<link rel=\"stylesheet\" type=\"text/css\" href=\"public/style.css\" />", $content);
+        $content = str_replace("@js", "<script src=\"public/main.js\"></script>", $content);
         foreach ($variables as $var) {
             $content = str_replace("{{".$var."}}", $this->data[$var] ?? "", $content);
             $content = str_replace("{{ ".$var."}}", $this->data[$var] ?? "", $content);
