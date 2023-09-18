@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+
+    @css
+</head>
+<body>
+    <main class="flex items-center justify-center flex-col">
+        <div class="headings">
+            <h1 class="mb-1 heading">Pine</h1>
+            <span class="subtitle">Your minimal web framework</span>
+        </div>
+        <div class="card-grid gap-3">
+            <a href="https://github.com/raahimfareed/pine/" class="block card">
+                <h3>Visit our github to learn more about Pine and read its docs!</h3>
+            </a>
+            <div class="card flex flex-col gap-3">
+                <h3 id="toChange">Hey</h3>
+                <input type="text" id="name" placeholder="Enter your name">
+                <button>Submit</button>
+            </div>
+            <div class="card">
+                <p class="mb-3">
+                    To get started, head over to <code>routes.php</code>
+                </p>
+                <p>
+                    You can create your own pages in <code>src/views</code>
+                </p>
+            </div>
+        </div>
+    </main>
+    @js
+</body>
+</html>
