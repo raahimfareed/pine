@@ -6,6 +6,8 @@ Pine is a minimal PHP Web Framework
 ## Prerequisites
 - PHP 8.2.10
 - Composer 2.6.2
+- Node 20.6.1 (Optional, only needed for vite/bun)
+- Bun 1.0 (Optional, only needed for vite)
 
 ## Installation
 
@@ -19,12 +21,25 @@ Install composer packages
 $ composer install
 ```
 
+Optional: If you intend on using ViteJS, you can install all js packages
+
+We use bun for this
+```sh
+$ bun install
+```
+
 Run PHP server
 ```sh
 $ php -S localhost:8000
 ```
 
 This will run a php server on localhost with port 8000
+
+In a new terminal window, start vite
+
+```sh
+$ bun run dev
+```
 
 ## Routing
 
@@ -86,9 +101,10 @@ And then you can access it in your leaf file
 ```
 
 ### CSS and JS
-Pine serves `public/css/main.css` and `public/js/main.js` files for css and js respectively
+Pine serves `public/style.css` and `public/main.js` files for css and js respectively
 
 You just need to add @css and @js directives in your leaf file if you need these files.
 
-Bundling with Vite coming soon!
+If you are using Vite, you will need to edit `src/resources/js/index.js` and `src/resources/css/index.css`
+as vite will automatically bundle js and css for you, you will still need @css and @js to add it into your html
 
