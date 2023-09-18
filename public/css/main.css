@@ -1,0 +1,62 @@
+/* Basic Normalize Styles */
+
+/* Reset margin and padding on all elements */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Set a baseline font size and line height */
+html {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* Remove list styles (bullets/numbers) */
+ul, ol {
+    list-style: none;
+}
+
+/* Remove default hyperlink styles */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Remove underlines on links within buttons */
+button, a.button {
+    text-decoration: none;
+}
+
+/* Remove the default focus outline */
+:focus {
+    outline: none;
+}
+
+/* Define consistent box-sizing for all elements */
+input, textarea, select, button {
+    box-sizing: border-box;
+}
+
+/* Remove default button styles */
+button {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+/* Define a basic border-box for all elements */
+input[type="text"],
+input[type="password"],
+textarea {
+    border: 1px solid #ccc;
+    padding: 8px;
+}
+
+/* Apply a consistent font family and size */
+body {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+}
+
