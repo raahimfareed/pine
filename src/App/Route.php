@@ -57,9 +57,25 @@ class Route {
 
     private static function render($to_render) {
         if (is_array($to_render)) {
-            echo "Array <br/>";
-            // TODO: Add a way to check arrays
-            return;
+            if (sizeof($to_render) < 2) {
+                // TODO: Proper error handling
+                echo "Array needs to have class and method";
+                return;
+            }
+
+            [$class, $method] = $to_render;
+
+            if (!class_exists($class)) {
+                echo "Class $class doesn't exist";
+                return;
+            }
+            if (!method_exists($class, $method)) {
+                echo "Method $method doesn't exist in $class";
+                return;
+            }
+
+            $class = new $class();
+            return $class->$method();
         }
 
         if (is_callable($to_render)) {
