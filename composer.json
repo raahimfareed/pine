@@ -2,6 +2,7 @@
     "name": "raahim/pine",
     "description": "Minimal PHP framework",
     "type": "project",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "Pine\\": "src/"
