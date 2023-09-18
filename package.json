@@ -1,0 +1,15 @@
+{
+  "name": "pine",
+  "module": "src/resources/js/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "bunx --bun vite build --watch"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "vite": "^4.4.9"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
