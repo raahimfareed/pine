@@ -117,3 +117,6 @@ You just need to add @css and @js directives in your leaf file if you need these
 If you are using Vite, you will need to edit `src/resources/js/index.js` and `src/resources/css/index.css`
 as vite will automatically bundle js and css for you, you will still need @css and @js to add it into your html
 
+## Migrations and Models
+Models and migrations are in the making, **coming soon**
+
