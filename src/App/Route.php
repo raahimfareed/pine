@@ -2,7 +2,7 @@
 
 namespace Pine\App;
 
-class Route {
+abstract class Route {
     private static $routes = [];
     private function __construct()
     {}
