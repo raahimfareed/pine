@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>{{title}}</title>
 
     @css
 </head>
+
 <body>
     <main class="flex items-center justify-center flex-col">
         <div class="headings">
@@ -16,11 +18,11 @@
             <a href="https://github.com/raahimfareed/pine/" class="block card">
                 <h3>Visit our github to learn more about Pine and read its docs!</h3>
             </a>
-            <div class="card flex flex-col gap-3">
+            <form class="card flex flex-col gap-3" id="form">
                 <h3 id="toChange">Hey</h3>
                 <input type="text" id="name" placeholder="Enter your name">
                 <button>Submit</button>
-            </div>
+            </form>
             <div class="card">
                 <p class="mb-3">
                     To get started, head over to <code>routes.php</code>
@@ -33,4 +35,5 @@
     </main>
     @js
 </body>
+
 </html>
