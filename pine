@@ -1,0 +1,91 @@
+#!/usr/bin/env php
+<?php
+require_once "./vendor/autoload.php";
+require_once "./src/config/bootstrap.php";
+require_once "./src/config/database.php";
+
+use Toolkit\PFlag\Flags;
+use Toolkit\PFlag\Flag\Option;
+use Toolkit\PFlag\FlagType;
+use Toolkit\PFlag\Validator\EnumValidator;
+
+$flags = $_SERVER['argv'];
+$scriptFile = array_shift($flags);
+
+$fs = Flags::new();
+$fs->setScriptFile($scriptFile);
+
+$fs->setSettings([
+  'descNlOnOptLen' => 26
+]);
+
+$fs->addOpt('migrate', 'm', 'Migrate the database', FlagType::STRING);
+
+if (!$fs->parse($flags)) {
+  // on render help
+  return;
+}
+$migrate = $fs->getOpt('migrate');
+
+if (strlen($migrate) > 0) {
+  $database_directory = "./src/database";
+
+  $files = glob($database_directory . "/*.php");
+
+  if ($migrate === "up") {
+    echo colorLog("Migrating") . "\n";
+    foreach ($files as $file) {
+      $fileName = pathinfo($file, PATHINFO_BASENAME);
+      $class = include $file;
+      try {
+        $class->up();
+        echo colorLog($fileName, 's') . "\n";
+      } catch (Exception $e) {
+        echo colorLog($fileName, 'e') . "\n";
+        echo colorLog("[Error]: ", 'e');
+        echo $e->getMessage() . "\n";
+      }
+    }
+
+    exit(0);
+  }
+
+  if ($migrate === "down") {
+    echo colorLog("Rolling Back") . "\n";
+    foreach ($files as $file) {
+      $fileName = pathinfo($file, PATHINFO_BASENAME);
+      $class = include $file;
+      try {
+        $class->down();
+        echo colorLog($fileName, 's') . "\n";
+      } catch (Exception $e) {
+        echo colorLog($fileName, 'e') . "\n";
+        echo colorLog("[Error]: ", 'e');
+        echo $e->getMessage() . "\n";
+      }
+    }
+
+    exit(0);
+  }
+}
+
+function colorLog($str, $type = 'i')
+{
+  switch ($type) {
+    case 'e': //error
+      return "\e[0;31m{$str} \e[0m";
+      break;
+    case 's': //success
+      return "\e[0;32m{$str} \e[0m";
+      break;
+    case 'w': //warning
+      return "\e[0;33m{$str} \e[0m";
+      break;
+    case 'i': //info
+      return "\e[0;36m{$str} \e[0m";
+      break;
+    default:
+      return "";
+      break;
+  }
+}
