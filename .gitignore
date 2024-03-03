@@ -2,6 +2,7 @@ vendor
 .vscode
 node_modules
 public/*
-
+composer.lock
+bun.lockb
 .env
 
