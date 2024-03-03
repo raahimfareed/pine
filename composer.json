@@ -17,6 +17,9 @@
     "require": {
         "php": ">=8.2",
         "vlucas/phpdotenv": "^5.5",
-        "symfony/inflector": "^5.4"
+        "symfony/inflector": "^5.4",
+        "illuminate/database": "^10.46",
+        "illuminate/events": "^10.46",
+        "toolkit/pflag": "^2.0"
     }
 }
