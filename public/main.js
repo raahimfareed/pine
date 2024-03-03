@@ -1,14 +1,11 @@
-console.log("Hello, World");
-
-const btn = document.querySelector("button");
-const name = document.getElementById("name");
-
-btn.addEventListener("click", () => {
-    const toChange = document.getElementById("toChange");
-
-    if (name.value.trim().length == 0) {
-        return;
-    }
-
-    toChange.textContent = `Hey, ${name.value.trim()}!`;
+console.log("Hello via Bun!");
+const o = document.getElementById("form");
+o.addEventListener("submit", (t) => {
+  t.preventDefault();
+  const e = document.getElementById("toChange"), n = document.getElementById("name").value.trim();
+  if (n.length === 0) {
+    e.innerText = "Hey";
+    return;
+  }
+  e.innerText = `Hey, ${n}!`;
 });
