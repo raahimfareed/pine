@@ -68,20 +68,26 @@ When rendering a view in routes, you will need to enter the view path relative t
 
 For example, with a project structure of the following
 ```sh
-./src/
-├── App
-│   ├── LeafTemplateEngine.php
-│   ├── Request.php
-│   ├── Route.php
-│   └── View.php
-├── config
-│   └── bootstrap.php
-├── routes.php
-└── views
-    └── test.leaf.html
+.
+├── pine
+├── src
+│   ├── Controllers
+│   │   └── SampleController.php
+│   ├── database
+│   │   └── 0001_create_users_table.php
+│   ├── resources
+│   │   ├── css
+│   │   │   └── index.css
+│   │   └── js
+│   │       └── index.js
+│   ├── routes.php
+│   └── views
+│       ├── controller.leaf.html
+│       └── index.leaf.html
+└── vite.config.js
 ```
 
-We have a test.leaf.html
+We have a index.leaf.html
 
 We can simple render this
 
@@ -117,6 +123,66 @@ You just need to add @css and @js directives in your leaf file if you need these
 If you are using Vite, you will need to edit `src/resources/js/index.js` and `src/resources/css/index.css`
 as vite will automatically bundle js and css for you, you will still need @css and @js to add it into your html
 
+## Controllers
+Barebone controller is implemented, doc needs to be updated.
+
 ## Migrations and Models
-Models and migrations are in the making, **coming soon**
+Migrations are used to create database schemas and models are used to manipulate the data in the tables.
+
+Pine comes bundled with Eloquent which is a powerful ORM primarily used by Laravel.
+
+### Creating Migrations
+Migrations are just PHP files with some code in it to define the schema of a table.
+
+By default, a users migration is provided.
+
+```php
+<?php
+
+use Illuminate\Database\Capsule\Manager as Capsule;
+
+return new class
+{
+  public function up(): void
+  {
+    Capsule::schema()->create('users', function ($table) {
+      $table->id();
+      $table->string('email')->unique();
+      $table->timestamps();
+    });
+  }
+
+  public function down(): void
+  {
+    Capsule::schema()->drop('users');
+  }
+};
+```
+
+If you've ever used Laravel, this will be similar to you.
+
+Two functions are required, `up` is for creating and `down` is for dropping.
+
+For the most part, you just need to use `schema` function to create or drop tables as well as change the table schema.
+
+For further help on how to use this, refer to [Laravel's Migrations](https://laravel.com/docs/10.x/migrations)
+
+### Running Migrations
+Pine comes with a pine file (shock). That file will come in handy for running migrations.
+
+To run the migration you can run
+```sh
+$ php pine --migrate up
+```
+
+And to rollback the migrations, you can run
+```sh
+$ php pine --migrate down
+```
+
+You can also use the shorthand `-m` instead of `--migrate`
+
+> [!IMPORTANT]  
+> The migrations are run in the the order of their number. For example, 0001 will be run first, then 0002, 0003, so on and so forth until the last migration.
+
 
