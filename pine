@@ -20,12 +20,15 @@ $fs->setSettings([
 ]);
 
 $fs->addOpt('migrate', 'm', 'Migrate the database', FlagType::STRING);
+$fs->addOpt('make', 'c', 'Make command to generate scaffolding of various things', FlagType::STRING);
 
 if (!$fs->parse($flags)) {
   // on render help
   return;
 }
+
 $migrate = $fs->getOpt('migrate');
+$make = $fs->getOpt('make');
 
 if (strlen($migrate) > 0) {
   $database_directory = "./src/database";
@@ -47,7 +50,7 @@ if (strlen($migrate) > 0) {
       }
     }
 
-    exit(0);
+    return;
   }
 
   if ($migrate === "down") {
@@ -65,7 +68,59 @@ if (strlen($migrate) > 0) {
       }
     }
 
-    exit(0);
+    return;
+  }
+
+  echo colorLog("Incorrect option {$migrate}") . "\n";
+  return;
+}
+
+if (strlen($make) > 0) {
+
+  if ($make == "migration") {
+    $input = readline("Enter migration name: ");
+
+    $directory = "./src/database";
+
+    $files = glob($directory . "/*.php");
+
+    rsort($files);
+
+    $latestFile = reset($files);
+
+    preg_match('/(\d+)_/', basename($latestFile), $matches);
+    if (isset($matches[1])) {
+      $nextNumber = str_pad((int) $matches[1] + 1, strlen($matches[1]), '0', STR_PAD_LEFT);
+      $newFile = $directory . '/' . $nextNumber . "_{$input}.php";
+      $fileContent = <<<EOL
+<?php
+
+use Illuminate\Database\Capsule\Manager as Capsule;
+
+return new class
+{
+    public function up(): void
+    {
+        Capsule::schema()->create('table_name', function (\$table) {
+            // Add your migration logic here
+        });
+    }
+
+    public function down(): void
+    {
+        // Add your rollback logic here
+    }
+};
+EOL;
+
+      file_put_contents($newFile, $fileContent);
+
+      echo colorLog("Migration file '{$newFile}' created successfully.", 's') . "\n";
+      return;
+    }
+
+    echo colorLog("Unable to create migration!", 'e');
+    return;
   }
 }
 
