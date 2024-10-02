@@ -8,31 +8,41 @@ abstract class Route {
     {}
 
     public static function get(string $path, $fn) {
-        $route = ['GET', $path];
-        if (strlen($path) === 0) {
-            self::$routes[serialize($route)] = $fn;
-            return;
-        }
-        if ($path[0] != "/") {
-            self::$routes[serialize($route)] = $fn;
-            return;
-        }
-
+        $route = self::createRouteKey('GET', $path);
         self::$routes[serialize($route)] = $fn;
     }
 
     public static function post(string $path, $fn) {
-        $route = ['POST', $path];
+        $route = self::createRouteKey('POST', $path);
+        self::$routes[serialize($route)] = $fn;
+    }
+
+    public static function delete(string $path, $fn) {
+        $route = self::createRouteKey('DELETE', $path);
+        self::$routes[serialize($route)] = $fn;
+    }
+
+    public static function put(string $path, $fn) {
+        $route = self::createRouteKey('PUT', $path);
+        self::$routes[serialize($route)] = $fn;
+    }
+
+    public static function patch(string $path, $fn) {
+        $route = self::createRouteKey('PATCH', $path);
+        self::$routes[serialize($route)] = $fn;
+    }
+
+    public static function createRouteKey(string $method, string $path) {
+        $route = [$method, $path];
         if (strlen($path) === 0) {
-            self::$routes[serialize($route)] = $fn;
-            return;
-        }
-        if ($path[0] != "/") {
-            self::$routes[serialize($route)] = $fn;
-            return;
+            $route[1] = '/';
         }
 
-        self::$routes[serialize($route)] = $fn;
+        if ($path[0] != "/") {
+            $route[1] = '/' . $path;
+        }
+
+        return $route;
     }
 
     public static function load() {
@@ -46,7 +56,7 @@ abstract class Route {
         $route = self::$routes[serialize($key)] ?? null;
 
         if ($route === null) {
-            header("HTTP/1.0 404 Not Found");
+            http_response_code(404);
             echo "404 Not Found";
             return;
         }
@@ -75,7 +85,20 @@ abstract class Route {
             }
 
             $class = new $class();
-            return $class->$method();
+            $result = $class->$method(new Request());
+            if (gettype($result) === "object" && get_class($result) === Response::class) {
+                if ($result->isJson()) {
+                    header("Content-Type: application/json; charset=utf-8");
+                }
+                http_response_code($result->status);
+                echo $result->body;
+                return;
+            }
+
+            if (gettype($result) === "string") {
+                echo $result;
+                return;
+            }
         }
 
         if (is_callable($to_render)) {
