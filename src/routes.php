@@ -1,6 +1,6 @@
 <?php
-use Pine\App\Route;
 use Pine\App\Request;
+use Pine\App\Route;
 use Pine\App\View;
 use Pine\Controllers\SampleController;
 

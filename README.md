@@ -15,8 +15,8 @@ On the other hand, if you stumble upon any issues (which I assume are plenty), p
 ## Prerequisites
 - PHP 8.2.10
 - Composer 2.6.2
-- Node 20.6.1 (Optional, only needed for vite/bun)
-- Bun 1.0 (Optional, only needed for vite)
+- Node 20.6.1
+- pnpm 9.1.1
 
 ## Installation
 
@@ -32,7 +32,7 @@ $ composer install
 
 Optional: If you intend on using ViteJS, you can install all js packages
 
-We use bun for this
+We use pnpm for this but, you can use any package manager for node
 ```sh
 $ bun install
 ```
