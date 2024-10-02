@@ -19,7 +19,6 @@ $fs->setSettings([
   'descNlOnOptLen' => 26
 ]);
 
-$fs->addOpt('migrate', 'm', 'Migrate the database', FlagType::STRING);
 $fs->addOpt('make', 'c', 'Make command to generate scaffolding of various things', FlagType::STRING);
 
 if (!$fs->parse($flags)) {
@@ -27,101 +26,10 @@ if (!$fs->parse($flags)) {
   return;
 }
 
-$migrate = $fs->getOpt('migrate');
 $make = $fs->getOpt('make');
 
-if (strlen($migrate) > 0) {
-  $database_directory = "./src/database";
-
-  $files = glob($database_directory . "/*.php");
-
-  if ($migrate === "up") {
-    echo colorLog("Migrating") . "\n";
-    foreach ($files as $file) {
-      $fileName = pathinfo($file, PATHINFO_BASENAME);
-      $class = include $file;
-      try {
-        $class->up();
-        echo colorLog($fileName, 's') . "\n";
-      } catch (Exception $e) {
-        echo colorLog($fileName, 'e') . "\n";
-        echo colorLog("[Error]: ", 'e');
-        echo $e->getMessage() . "\n";
-      }
-    }
-
-    return;
-  }
-
-  if ($migrate === "down") {
-    echo colorLog("Rolling Back") . "\n";
-    foreach ($files as $file) {
-      $fileName = pathinfo($file, PATHINFO_BASENAME);
-      $class = include $file;
-      try {
-        $class->down();
-        echo colorLog($fileName, 's') . "\n";
-      } catch (Exception $e) {
-        echo colorLog($fileName, 'e') . "\n";
-        echo colorLog("[Error]: ", 'e');
-        echo $e->getMessage() . "\n";
-      }
-    }
-
-    return;
-  }
-
-  echo colorLog("Incorrect option {$migrate}") . "\n";
-  return;
-}
-
 if (strlen($make) > 0) {
-
-  if ($make == "migration") {
-    $input = readline("Enter migration name: ");
-
-    $directory = "./src/database";
-
-    $files = glob($directory . "/*.php");
-
-    rsort($files);
-
-    $latestFile = reset($files);
-
-    preg_match('/(\d+)_/', basename($latestFile), $matches);
-    if (isset($matches[1])) {
-      $nextNumber = str_pad((int) $matches[1] + 1, strlen($matches[1]), '0', STR_PAD_LEFT);
-      $newFile = $directory . '/' . $nextNumber . "_{$input}.php";
-      $fileContent = <<<EOL
-<?php
-
-use Illuminate\Database\Capsule\Manager as Capsule;
-
-return new class
-{
-    public function up(): void
-    {
-        Capsule::schema()->create('table_name', function (\$table) {
-            // Add your migration logic here
-        });
-    }
-
-    public function down(): void
-    {
-        // Add your rollback logic here
-    }
-};
-EOL;
-
-      file_put_contents($newFile, $fileContent);
-
-      echo colorLog("Migration file '{$newFile}' created successfully.", 's') . "\n";
-      return;
-    }
-
-    echo colorLog("Unable to create migration!", 'e');
-    return;
-  }
+  // TODO: Add for controllers
 }
 
 function colorLog($str, $type = 'i')
