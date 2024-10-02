@@ -66,15 +66,12 @@ All view files should have an extension of `.leaf.html`
 
 When rendering a view in routes, you will need to enter the view path relative to the view folder and without the extension
 
-For example, with a project structure of the following
+For example, with a project structure of the following (This is the complete project structure, unnecessary directories and files are hidden for this example)
 ```sh
 .
-├── pine
 ├── src
 │   ├── Controllers
 │   │   └── SampleController.php
-│   ├── database
-│   │   └── 0001_create_users_table.php
 │   ├── resources
 │   │   ├── css
 │   │   │   └── index.css
