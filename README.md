@@ -34,7 +34,7 @@ Optional: If you intend on using ViteJS, you can install all js packages
 
 We use pnpm for this but, you can use any package manager for node
 ```sh
-$ bun install
+$ pnpm install
 ```
 
 Run PHP server
@@ -47,7 +47,7 @@ This will run a php server on localhost with port 8000
 In a new terminal window, start vite
 
 ```sh
-$ bun run dev
+$ pnpm run dev
 ```
 
 ## Routing
@@ -127,9 +127,8 @@ as vite will automatically bundle js and css for you, you will still need @css a
 Barebone controller is implemented, doc needs to be updated.
 
 ## Migrations and Models
-Migrations are used to create database schemas and models are used to manipulate the data in the tables.
-
-Pine comes bundled with Eloquent which is a powerful ORM primarily used by Laravel.
+> [!NOTE]  
+> Migrations and models are not implemented yet, they will be added in the future along with database helpers.
 
 ### Creating Migrations
 Migrations are just PHP files with some code in it to define the schema of a table.
