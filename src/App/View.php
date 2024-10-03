@@ -10,5 +10,7 @@ class View {
         $engine = new LeafTemplateEngine();
 
         $engine->render(__DIR__ . "/../views/" . $newPath, $data);
+        // $lexer = new LeafTemplateLexer(file_get_contents(__DIR__ . "/../views/" . $newPath));
+        // dump($lexer->tokenize());
     }
 }
