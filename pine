@@ -2,8 +2,8 @@
 <?php
 require_once "./vendor/autoload.php";
 require_once "./src/config/bootstrap.php";
-require_once "./src/config/database.php";
 
+use Toolkit\PFlag\Exception\FlagParseException;
 use Toolkit\PFlag\Flags;
 use Toolkit\PFlag\Flag\Option;
 use Toolkit\PFlag\FlagType;
@@ -21,15 +21,46 @@ $fs->setSettings([
 
 $fs->addOpt('make', 'c', 'Make command to generate scaffolding of various things', FlagType::STRING);
 
-if (!$fs->parse($flags)) {
-  // on render help
-  return;
+try {
+    $fs->parse($flags);
+} catch (FlagParseException $e) {
+    echo colorLog($e->getMessage(), 'e');
+    exit(1);
 }
+
 
 $make = $fs->getOpt('make');
 
 if (strlen($make) > 0) {
-  // TODO: Add for controllers
+
+  if ($make == "controller") {
+    $input = readline("Enter controller name: ");
+
+    $directory = "./src/Controllers";
+
+    $newFile = $directory . "/{$input}.php";
+    $fileContent = <<<EOL
+<?php
+
+namespace Pine\Controllers;
+
+use Pine\App\Controller;
+use Pine\App\Request;
+
+class $input extends Controller
+{
+    public function index(Request \$request) {
+        
+    }
+};
+EOL;
+
+    file_put_contents($newFile, $fileContent);
+
+    echo colorLog("Controller file '{$newFile}' created successfully.", 's') . "\n";
+
+    return;
+  }
 }
 
 function colorLog($str, $type = 'i')
