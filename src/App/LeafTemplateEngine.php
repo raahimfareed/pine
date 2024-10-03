@@ -7,6 +7,15 @@ class LeafTemplateEngine {
 
     public function render($templatePath, array $data = []) {
         $this->data = $data;
+        // $templateContent = file_get_contents($templatePath);
+        //
+        // $lexer = new LeafTemplateLexer($templateContent);
+        // $tokens = $lexer->tokenize();
+        //
+        // $parser = new LeafTemplateParser($tokens);
+        // $ast = $parser->parse();
+        //
+        // dump($ast);
         ob_start();
 
         include $templatePath;
@@ -24,6 +33,7 @@ class LeafTemplateEngine {
         $variables = $this->extractTemplateVariables($content);
         $content = str_replace("@css", "<link rel=\"stylesheet\" type=\"text/css\" href=\"public/style.css\" />", $content);
         $content = str_replace("@js", "<script src=\"public/main.js\"></script>", $content);
+        dump($this->data);
         foreach ($variables as $var) {
             $content = str_replace("{{".$var."}}", $this->data[$var] ?? "", $content);
             $content = str_replace("{{ ".$var."}}", $this->data[$var] ?? "", $content);
