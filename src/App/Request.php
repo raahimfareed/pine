@@ -3,11 +3,16 @@
 namespace Pine\App;
 
 class Request {
-    public array $body = [];
+    public $body;
     public array $headers = [];
+
+    public string $uri;
+    public string $method;
 
     public function __construct()
     {
+        $this->uri = $_SERVER['REQUEST_URI'];
+        $this->method = $_SERVER['REQUEST_METHOD'];
         $this->headers = getallheaders();
         $form_body = $_REQUEST;
         $entityBody = file_get_contents('php://input');
