@@ -2,10 +2,18 @@
 
 namespace Pine\App;
 
+use Pine\Exceptions\ViewNotFound;
+
 class LeafTemplateEngine {
     private $data = [];
 
+    /**
+     * @throws ViewNotFound
+     */
     public function render($templatePath, array $data = []) {
+        if (!file_exists($templatePath)) {
+            throw new ViewNotFound($templatePath);
+        }
         $this->data = $data;
         // $templateContent = file_get_contents($templatePath);
         //
@@ -33,7 +41,6 @@ class LeafTemplateEngine {
         $variables = $this->extractTemplateVariables($content);
         $content = str_replace("@css", "<link rel=\"stylesheet\" type=\"text/css\" href=\"public/style.css\" />", $content);
         $content = str_replace("@js", "<script src=\"public/main.js\"></script>", $content);
-        dump($this->data);
         foreach ($variables as $var) {
             $content = str_replace("{{".$var."}}", $this->data[$var] ?? "", $content);
             $content = str_replace("{{ ".$var."}}", $this->data[$var] ?? "", $content);
