@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Not Found</title>
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=jetbrains-mono:400|poppins:400,700,900" rel="stylesheet" />
+    @css
+</head>
+<body class="gap-3 p-4 flex justify-center flex-col">
+<h1 class="heading">Error Occurred</h1>
+<p class="text-red"><strong>Error: </strong>{{errorMessage}}</p>
+<p><strong>File: </strong>{{errorFile}}</p>
+<p><strong>Line: </strong>{{lineNumber}}</p>
+<p><strong>Stack Trace: </strong></p>
+<pre class="code">{{errorTrace}}</pre>
+</body>
+</html>
