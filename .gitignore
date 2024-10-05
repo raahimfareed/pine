@@ -1,8 +1,9 @@
 vendor
 .vscode
 node_modules
-public/*
+public
 composer.lock
 bun.lockb
+pnpm-lock.yaml
 .env
 
