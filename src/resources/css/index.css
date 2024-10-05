@@ -126,12 +126,16 @@ table {
   border-spacing: 0;
 }
 
+strong {
+  font-weight: bold;
+}
+
 /* Pine Styles */
 
 body {
   font-family: Poppins, sans-serif;
-  color: #111;
-  background-color: #f4f4f4;
+  background-color: #030712;
+  color: #f3f4f6;
 }
 
 main {
@@ -198,8 +202,8 @@ main {
 
 .card {
   text-decoration: none;
-  color: #111;
-  background-color: white;
+  color: #f3f4f6;
+  background-color: #09090b;
   border-radius: 7px;
   padding: 1rem;
   width: clamp(200px, 100%, 10vw);
@@ -208,7 +212,9 @@ main {
 }
 
 input {
-  border: 2px solid #ddd;
+  border: 2px solid #0c0a09;
+  background-color: #18181b;
+  color: #f3f4f6;
   border-radius: 4px;
   opacity: 1;
   padding: 0.25rem;
@@ -218,8 +224,8 @@ input {
 button {
   border: none;
   border-radius: 4px;
-  background-color: #111;
-  color: #fff;
+  background-color: #18181b;
+  color: #f3f4f6;
   opacity: 1;
   padding: 0.25rem 1rem;
   cursor: pointer;
@@ -228,4 +234,28 @@ button {
 
 button:hover {
   opacity: 0.7;
+}
+
+.code {
+  font-family: "JetBrains Mono", monospace !important;
+}
+
+.p-1 {
+  padding: 0.25rem;
+}
+
+.p-2 {
+  padding: 0.5rem;
+}
+
+.p-3 {
+  padding: 0.75rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.text-red {
+  color: #dc2626;
 }
