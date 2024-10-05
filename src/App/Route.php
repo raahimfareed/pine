@@ -2,37 +2,45 @@
 
 namespace Pine\App;
 
+use Pine\Exceptions\RouteNotFound;
+
 abstract class Route {
-    private static $routes = [];
+    private static array $routes = [];
     private function __construct()
     {}
 
-    public static function get(string $path, $fn) {
+    public static function get(string $path, $fn): void
+    {
         $route = self::createRouteKey('GET', $path);
         self::$routes[serialize($route)] = $fn;
     }
 
-    public static function post(string $path, $fn) {
+    public static function post(string $path, $fn): void
+    {
         $route = self::createRouteKey('POST', $path);
         self::$routes[serialize($route)] = $fn;
     }
 
-    public static function delete(string $path, $fn) {
+    public static function delete(string $path, $fn): void
+    {
         $route = self::createRouteKey('DELETE', $path);
         self::$routes[serialize($route)] = $fn;
     }
 
-    public static function put(string $path, $fn) {
+    public static function put(string $path, $fn): void
+    {
         $route = self::createRouteKey('PUT', $path);
         self::$routes[serialize($route)] = $fn;
     }
 
-    public static function patch(string $path, $fn) {
+    public static function patch(string $path, $fn): void
+    {
         $route = self::createRouteKey('PATCH', $path);
         self::$routes[serialize($route)] = $fn;
     }
 
-    public static function createRouteKey(string $method, string $path) {
+    public static function createRouteKey(string $method, string $path): array
+    {
         $route = [$method, $path];
         if (strlen($path) === 0) {
             $route[1] = '/';
@@ -45,7 +53,11 @@ abstract class Route {
         return $route;
     }
 
-    public static function load() {
+    /**
+     * @throws RouteNotFound
+     */
+    public static function load(): void
+    {
         $uri = $_SERVER['REQUEST_URI'];
         $uriArr = explode('?', $uri);
         $uri = $uriArr[0];
@@ -57,8 +69,7 @@ abstract class Route {
 
         if ($route === null) {
             http_response_code(404);
-            echo "404 Not Found";
-            return;
+            throw new RouteNotFound($uri);
         }
 
         self::render($route);
