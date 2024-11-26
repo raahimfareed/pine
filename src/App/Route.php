@@ -101,6 +101,9 @@ abstract class Route {
                 if ($result->isJson()) {
                     header("Content-Type: application/json; charset=utf-8");
                 }
+                foreach ($result->headers() as $header => $value) {
+                    header("$header: $value");
+                }
                 http_response_code($result->status);
                 echo $result->body;
                 return;
