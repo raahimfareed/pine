@@ -3,14 +3,19 @@
 namespace Pine\App;
 
 class Request {
-    public $body;
-    public array $headers = [];
+    public array $body;
+    public array $params = [];
+    public array $headers;
 
     public string $uri;
     public string $method;
 
-    public function __construct()
+
+    public function __construct(?array $params)
     {
+        if (!!$params) {
+            $this->params = $params;
+        }
         $this->uri = $_SERVER['REQUEST_URI'];
         $this->method = $_SERVER['REQUEST_METHOD'];
         $this->headers = getallheaders();
