@@ -17,7 +17,11 @@ class ErrorHandler
             if (method_exists($exception, 'getStatusCode')) {
                 $status = $exception->getStatusCode();
                 $response->status = $status;
-                $response->body = ["message" => $errorMessage, "file" => $errorFile, "line" => $lineNumber, "trace" => $errorTrace];
+                if (Util::env("APP_DEBUG")) {
+                    $response->body = ["message" => $errorMessage, "file" => $errorFile, "line" => $lineNumber, "trace" => $errorTrace];
+                } else {
+                    $response->body = ["message" => $errorMessage];
+                }
                 $result = $response->json();
 
                 if ($response->isJson()) {
