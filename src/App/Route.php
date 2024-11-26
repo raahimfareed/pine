@@ -19,44 +19,44 @@ abstract class Route {
 
     public static function get(string $path, $fn): void
     {
-        $route = self::createRouteKey('GET', self::generateRouteRegexPattern($path));
+        $route = self::createRouteKey('GET', trim($path));
         self::$routes[serialize($route)] = $fn;
     }
 
     public static function post(string $path, $fn): void
     {
-        $route = self::createRouteKey('POST', self::generateRouteRegexPattern($path));
+        $route = self::createRouteKey('POST', trim($path));
         self::$routes[serialize($route)] = $fn;
     }
 
     public static function delete(string $path, $fn): void
     {
-        $route = self::createRouteKey('DELETE', self::generateRouteRegexPattern($path));
+        $route = self::createRouteKey('DELETE', trim($path));
         self::$routes[serialize($route)] = $fn;
     }
 
     public static function put(string $path, $fn): void
     {
-        $route = self::createRouteKey('PUT', self::generateRouteRegexPattern($path));
+        $route = self::createRouteKey('PUT', trim($path));
         self::$routes[serialize($route)] = $fn;
     }
 
     public static function patch(string $path, $fn): void
     {
-        $route = self::createRouteKey('PATCH', self::generateRouteRegexPattern($path));
+        $route = self::createRouteKey('PATCH', trim($path));
         self::$routes[serialize($route)] = $fn;
     }
 
     public static function createRouteKey(string $method, string $pathPattern): array
     {
         $route = [$method, $pathPattern];
-        // if (strlen($pathPattern) === 0) {
-        //     $route[1] = '/';
-        // }
-        //
-        // if ($pathPattern[0] != "/") {
-        //     $route[1] = '/' . $pathPattern;
-        // }
+        if (strlen($pathPattern) === 0) {
+            $route[1] = '/';
+        }
+
+        if ($pathPattern[0] != "/") {
+            $route[1] = '/' . $pathPattern;
+        }
 
         return $route;
     }
@@ -71,18 +71,35 @@ abstract class Route {
         $uri = $uriArr[0];
         $method = $_SERVER['REQUEST_METHOD'];
 
-
         foreach (self::$routes as $key => $fn) {
-            $pattern = unserialize($key);
+            $key = unserialize($key);
+            $path = $key[1];
 
-            if ($method !== $pattern[0]) continue;
+            if ($method !== $key[0]) continue;
 
-            if (preg_match($pattern[1], $uri, $matches)) {
+            if ($path === $uri) {
+                self::render($fn);
+                return;
+            }
+
+            $regexPath = self::generateRouteRegexPattern($path);
+            if (preg_match($regexPath, $uri, $matches)) {
                 array_shift($matches);
                 $params = $matches;
+                $splitUri = explode(':', $path);
+                $paramNames = [];
+                foreach ($splitUri as $item) {
+                    if (strlen($item) === 0 || $item[0] === '/') continue;
+                    $sanitized = explode('/', $item)[0];
+                    array_push($paramNames, $sanitized);
+                }
+                $params = array_combine($paramNames, $params);
                 self::render($fn, $params);
                 return;
             }
+
+
+            continue;
         }
 
         http_response_code(404);
@@ -91,7 +108,7 @@ abstract class Route {
     }
 
 
-    private static function render($to_render) {
+    private static function render($to_render, ?array $params = null) {
         if (is_array($to_render)) {
             if (sizeof($to_render) < 2) {
                 // TODO: Proper error handling
@@ -111,7 +128,7 @@ abstract class Route {
             }
 
             $class = new $class();
-            $result = $class->$method(new Request());
+            $result = $class->$method(new Request($params));
             if (gettype($result) === "object" && get_class($result) === Response::class) {
                 if ($result->isJson()) {
                     header("Content-Type: application/json; charset=utf-8");
@@ -131,7 +148,7 @@ abstract class Route {
         }
 
         if (is_callable($to_render)) {
-            $called = $to_render(new Request);
+            $called = $to_render(new Request($params));
 
             if (is_string($called)) {
                 echo $called;
