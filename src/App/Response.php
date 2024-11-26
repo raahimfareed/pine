@@ -7,10 +7,29 @@ class Response {
 
     public $body;
     public $status;
+    public $_headers = [];
 
     public function __construct($status = 200, $body = []) {
         $this->status = $status;
         $this->body = $body;
+    }
+
+    public function headers(string | array | null $to_append = null): array
+    {
+        if ($to_append === null) {
+            return $this->_headers;
+        }
+
+        $type = gettype($to_append);
+        if ($type === 'string') {
+            array_push($this->_headers, $to_append);
+        }
+
+        if ($type === 'array') {
+            $this->_headers = array_merge($this->_headers, $to_append);
+        }
+
+        return $this->_headers;
     }
 
     public function json() {
