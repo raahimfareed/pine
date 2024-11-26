@@ -9,46 +9,54 @@ abstract class Route {
     private function __construct()
     {}
 
+    public static function generateRouteRegexPattern(string $path): string
+    {
+        $pattern = preg_replace('/:[^\/]+/', '([^\/]+)', $path);
+        $pattern = '#^' . $pattern . '$#';
+
+        return $pattern;
+    }
+
     public static function get(string $path, $fn): void
     {
-        $route = self::createRouteKey('GET', $path);
+        $route = self::createRouteKey('GET', self::generateRouteRegexPattern($path));
         self::$routes[serialize($route)] = $fn;
     }
 
     public static function post(string $path, $fn): void
     {
-        $route = self::createRouteKey('POST', $path);
+        $route = self::createRouteKey('POST', self::generateRouteRegexPattern($path));
         self::$routes[serialize($route)] = $fn;
     }
 
     public static function delete(string $path, $fn): void
     {
-        $route = self::createRouteKey('DELETE', $path);
+        $route = self::createRouteKey('DELETE', self::generateRouteRegexPattern($path));
         self::$routes[serialize($route)] = $fn;
     }
 
     public static function put(string $path, $fn): void
     {
-        $route = self::createRouteKey('PUT', $path);
+        $route = self::createRouteKey('PUT', self::generateRouteRegexPattern($path));
         self::$routes[serialize($route)] = $fn;
     }
 
     public static function patch(string $path, $fn): void
     {
-        $route = self::createRouteKey('PATCH', $path);
+        $route = self::createRouteKey('PATCH', self::generateRouteRegexPattern($path));
         self::$routes[serialize($route)] = $fn;
     }
 
-    public static function createRouteKey(string $method, string $path): array
+    public static function createRouteKey(string $method, string $pathPattern): array
     {
-        $route = [$method, $path];
-        if (strlen($path) === 0) {
-            $route[1] = '/';
-        }
-
-        if ($path[0] != "/") {
-            $route[1] = '/' . $path;
-        }
+        $route = [$method, $pathPattern];
+        // if (strlen($pathPattern) === 0) {
+        //     $route[1] = '/';
+        // }
+        //
+        // if ($pathPattern[0] != "/") {
+        //     $route[1] = '/' . $pathPattern;
+        // }
 
         return $route;
     }
@@ -63,16 +71,23 @@ abstract class Route {
         $uri = $uriArr[0];
         $method = $_SERVER['REQUEST_METHOD'];
 
-        $key = [$method, $uri];
 
-        $route = self::$routes[serialize($key)] ?? null;
+        foreach (self::$routes as $key => $fn) {
+            $pattern = unserialize($key);
 
-        if ($route === null) {
-            http_response_code(404);
-            throw new RouteNotFound($uri);
+            if ($method !== $pattern[0]) continue;
+
+            if (preg_match($pattern[1], $uri, $matches)) {
+                array_shift($matches);
+                $params = $matches;
+                self::render($fn, $params);
+                return;
+            }
         }
 
-        self::render($route);
+        http_response_code(404);
+        throw new RouteNotFound($uri);
+
     }
 
 
