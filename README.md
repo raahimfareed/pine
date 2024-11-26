@@ -22,26 +22,26 @@ at it.
 
 First clone the repository
 ```sh
-$ git clone https://github.com/raahimfareed/pine.git
+git clone https://github.com/raahimfareed/pine.git
 ```
 
 Install composer packages
 ```sh
-$ composer install
+composer install
 ```
 
 Optional: If you intend on using ViteJS, you can install all js packages
 
 We use pnpm for this but, you can use any package manager for node
 ```sh
-$ pnpm install
+pnpm install
 # Or
-$ npm install
+npm install
 ```
 
 Run PHP server
 ```sh
-$ php -S localhost:8000
+php -S localhost:8000
 ```
 
 This will run a php server on localhost with port 8000
@@ -49,7 +49,7 @@ This will run a php server on localhost with port 8000
 In a new terminal window, start vite
 
 ```sh
-$ pnpm dev
+pnpm dev
 ```
 
 
