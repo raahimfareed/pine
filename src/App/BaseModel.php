@@ -12,6 +12,7 @@ abstract class BaseModel {
 
     public static function create(array $values) {
         $calledClass = static::class;
+        $primaryKey = $calledClass::$_primaryKey;
         $instance = self::instantiate($values);
         $table = $calledClass::$_table;
         $reflection = new ReflectionClass($instance);
@@ -40,12 +41,74 @@ abstract class BaseModel {
         }
 
         $status = $stmt->execute();
-        // TODO: Do something with the status, throw an exception perhaps
+        $_record = null;
+        if (!!$status) {
+          $sql = "SELECT * FROM $table WHERE $primaryKey = LAST_INSERT_ID() LIMIT 1;";
+          $stmt = $connection->query($sql);
+          $record = $stmt->fetch();
+
+          $_record = new $calledClass;
+          $reflection = new ReflectionClass($calledClass);
+          foreach ($record as $key => $value) {
+            if ($reflection->hasProperty($key)) {
+              $property = $reflection->getProperty($key);
+              $property->setAccessible(true);
+              $property->setValue($_record, $value);
+            } else {
+              $_record->$key = $value;
+            }
+          }
+        }
+
+        return $_record;
     }
 
     public function save() {
         $dbInstance = Database::getInstance();
         $connection = $dbInstance->getConnection();
+
+        $primaryKeyName = static::$_primaryKey;
+        $primaryKey = $this->$primaryKeyName;
+
+        $reflection = new ReflectionClass($this);
+        $properties = $reflection->getProperties();
+
+        $columns = [];
+        $values = [];
+
+        foreach ($properties as $property) {
+          $declaringClass = $property->getDeclaringClass()->getName();
+          if ($declaringClass !== static::class) continue;
+          $property->setAccessible(true);
+          $name = $property->getName();
+          $value = $property->getValue($this);
+          if ($name[0] === '_') continue;
+
+          if ($name === $primaryKeyName) continue;
+
+          $columns[] = "`$name` = ?";
+          $values[] = $value;
+        }
+
+        $values[] = $primaryKey;
+        $table = static::$_table;
+        $setClause = implode(', ', $columns);
+        $sql = "UPDATE `$table` SET $setClause WHERE `$primaryKeyName` = ?;";
+
+        dump($columns, $values);
+
+        $stmt = $connection->prepare($sql);
+        $status = $stmt->execute($values);
+
+        return $status;
+    }
+
+    public function destroy() {
+
+    }
+
+    public function find() {
+
     }
 
     abstract public static function initialize();
@@ -82,14 +145,6 @@ abstract class BaseModel {
         return $this;
     }
 
-    public function primary($column) {
-        $calledClass = static::class;
-        if (isset($calledClass::$_attributes[$column])) {
-            $calledClass::$_attributes[$column]['primary'] = true;
-        }
-        return $this;
-    }
-
     public function autoIncrement($column) {
         $calledClass = static::class;
         if (isset($calledClass::$_attributes[$column])) {
@@ -109,10 +164,11 @@ abstract class BaseModel {
     public static function createTable() {
         $columnSql = [];
         $calledClass = static::class;
+        $primaryKey = $calledClass::$_primaryKey;
+        $columnSql[] = "$primaryKey INT NOT NULL PRIMARY KEY AUTO_INCREMENT";
         foreach ($calledClass::$_attributes as $name => $options) {
             $column = "$name {$options['type']}";
             if (!empty($options['autoIncrement'])) $column .= " AUTO_INCREMENT";
-            if (!empty($options['primary'])) $column .= " PRIMARY KEY";
             if (isset($options['nullable']) && !$options['nullable']) $column .= " NOT NULL";
             $columnSql[] = $column;
         }

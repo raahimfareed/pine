@@ -15,7 +15,6 @@ class User extends BaseModel {
 
     public static function initialize() {
         self::setup()
-            ->addColumn('id', 'INT')->primary('id')->autoIncrement('id')
             ->addColumn('name', "VARCHAR(255)")->nullable('name', false)
             ->addColumn('email', "VARCHAR(255)")->nullable('email', false)
             ->addColumn('password', "VARCHAR(255)")->nullable('password', false);
