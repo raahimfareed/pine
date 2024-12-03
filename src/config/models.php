@@ -4,4 +4,3 @@ use Pine\Models\Test;
 use Pine\Models\User;
 
 User::sync();
-Test::sync();
