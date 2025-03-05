@@ -4,6 +4,7 @@ namespace Pine\Models;
 
 use Pine\App\BaseModel;
 
+#[\AllowDynamicProperties]
 class User extends BaseModel {
     public static string $_table = "users";
     public static string $_primaryKey = "id";
