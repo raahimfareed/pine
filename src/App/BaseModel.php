@@ -12,7 +12,7 @@ abstract class BaseModel {
 
     public static function create(array $values) {
         $calledClass = static::class;
-        $primaryKey = $calledClass::$_primaryKey;
+        $primaryKey = $calledClass::$_primaryKey ?? "id";
         $instance = self::instantiate($values);
         $table = $calledClass::$_table;
         $reflection = new ReflectionClass($instance);
