@@ -1,0 +1,36 @@
+services:
+  php:
+    build: .
+    volumes:
+      - ./:/var/www/html
+    working_dir: /var/www/html
+    command: php -S 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mariadb
+
+  mariadb:
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  vite:
+    image: node:22-alpine
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: >
+      sh -c "npm install
+      && npm run dev"
+    ports:
+      - "5173:5173"
+volumes:
+  db_data:

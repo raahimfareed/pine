@@ -5,5 +5,6 @@ public
 composer.lock
 bun.lockb
 pnpm-lock.yaml
+package-lock.json
 .env
 
